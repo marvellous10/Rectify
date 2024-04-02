@@ -1,11 +1,5 @@
-<script lang="ts">
-import { SpeedInsights } from '@vercel/speed-insights/vue';
-</script>
-
-
 <template>
     <div class="pagelayout">
-        <SpeedInsights />
         <nav class="navbar">
             <NuxtLink to="/" class="logo-placeholder">
                 <div class="logo">
