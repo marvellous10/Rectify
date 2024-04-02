@@ -181,7 +181,7 @@ html, body {
         height: fit-content;
         justify-items: center;
         .navbar {
-            width: 360px;
+            width: 336px;
             padding: 12px;
             height: 24px;
             margin-top: 20px;
