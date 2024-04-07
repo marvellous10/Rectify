@@ -22,7 +22,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-
+    'https://rectify-usersession.onrender.com',
+    'https://rectify-usersession.onrender.com/',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
