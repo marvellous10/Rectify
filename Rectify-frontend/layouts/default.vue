@@ -1,3 +1,39 @@
+<script setup lang="ts">
+import { useUserStore } from '../stores/user.store';
+import { useRouter, useRoute } from 'vue-router'
+
+
+const userstore = useUserStore()
+const router = useRouter()
+const route = useRoute()
+
+const isAuthenticated = computed(() => userstore.access_token !== null)
+var user_name = "" as string
+if (isAuthenticated) {
+    user_name = userstore.spotify_display_name as string
+}
+
+const spotifyLogin = async () => {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/users/spotify/login/')
+        const data = await response.json()
+        const auth_url = data.auth_url
+        window.location.href = auth_url.replace(
+            'http://localhost:3000/callback/',
+            'http://localhost:3000/callback'
+        )
+    } catch(error) {
+        console.error(error)
+    }
+}
+
+
+const logout = async () => {
+    userstore.clearUserSession()
+    router.push('/')
+}
+</script>
+
 <template>
     <div class="pagelayout">
         <nav class="navbar">
@@ -17,8 +53,16 @@
                 <NuxtLink to="/create/playlist" class="link">Create <span class="mobile-hidden">playlist</span></NuxtLink>
             </div>
             <div class="sign-in">
-                <button class="grn-btn mobile-nav-btn">
+                <button class="grn-btn mobile-nav-btn" @click="spotifyLogin" v-if="!isAuthenticated">
                     <span>Sign in with spotify</span>
+                </button>
+                <button class="grn-btn-lgt" @click="logout" v-else>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 22 22" stroke-width="1.5" stroke="#04D04D" class="w-6 h-6">
+                        <g>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                        </g>
+                    </svg>
+                    <span>{{ user_name }}</span>
                 </button>
             </div>
         </nav>
@@ -42,11 +86,6 @@
 </template>
 
 <style lang="scss">
-html, body {
-    margin: 0;
-    padding: 0;
-    background: #191414; 
-}
 .text-selection::selection {
     background-color: #04D04D;
 }
@@ -55,6 +94,31 @@ html, body {
 }
 .footer-link {
     text-decoration: none;
+}
+.grn-btn-lgt {
+    background: #191414;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 38px;
+    column-gap: 5px;
+    border: 2px solid #04D04D;
+    min-width: 158px;
+    padding-left: 5px;
+    padding-right:5px;
+    outline: 0;
+    border-radius: 20px;
+    svg {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        margin-top: -5px;
+    }
+    span {
+        font-family: 'medium';
+        font-size: 15px;
+        color: #04D04D;
+    }
 }
 .grn-btn {
     background: #04D04D;
@@ -77,10 +141,11 @@ html, body {
     display: grid;
     align-content: start;
     justify-items: center;
-    width: 98vw;
-    margin: 0 auto;
+    width: 98.5vw;
+    height: fit-content;
     height: fit-content;
     padding-bottom:30px;
+    background: #191414;
     .navbar {
         display: flex;
         align-items: center;
@@ -176,6 +241,33 @@ html, body {
     .mobile-btn-hidden {
         display: none;
     }
+    .grn-btn-lgt {
+        background: #191414;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 24px;
+        column-gap: 5px;
+        border: 2px solid #04D04D;
+        min-width: 120px;
+        padding-left: 5px;
+        padding-right: 5px;
+        outline: 0;
+        border-radius: 20px;
+        svg {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            margin-top: -3px;
+            width: 14px;
+            height: 14px;
+        }
+        span {
+            font-family: 'medium';
+            font-size: 12px;
+            color: #04D04D;
+        }
+    }
     .pagelayout {
         width: 100vw;
         height: fit-content;
@@ -233,4 +325,5 @@ html, body {
         }
     }
 }
+
 </style>

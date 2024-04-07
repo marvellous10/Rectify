@@ -12,5 +12,5 @@ export default defineNuxtConfig({
     '~/assets/css/main.css',
   ],
 
-  modules: ["@nuxt/image"]
+  modules: ["@nuxt/image", '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt']
 })

@@ -19,3 +19,14 @@
 5. Frontend Hosting service: Render (They've got nice free tiers though it wouldn't hurt to look at better options)
 6. Database (if necessary): Mongodb (Main database), Cache (Redis)
 
+
+
+
+
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('spotify/login/', SpotifyLoginView.as_view(), name='spotify_login'),
+    path('spotify/callback/', SpotifyCallBackView.as_view(), name='spotify_callback'),
+]
