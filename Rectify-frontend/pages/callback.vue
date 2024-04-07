@@ -10,6 +10,7 @@ definePageMeta({
 const userstore = useUserStore()
 const router = useRouter()
 const route = useRoute()
+const config = useRuntimeConfig()
 
 
 const handleCallback = async() => {
@@ -17,7 +18,7 @@ const handleCallback = async() => {
     try {
         const code = route.query.code
         if (code) {
-            const response = await fetch(`http://127.0.0.1:8000/users/spotify/callback/?code=${code}`)
+            const response = await fetch(`${config.public.SPOTIFY_CALLBACK_ENDPOINT}${code}`)
             const data = await response.json()
             userstore.setUserSessionParams(data.id, data.spotify_display_name, data.access_token)
             router.push('/')

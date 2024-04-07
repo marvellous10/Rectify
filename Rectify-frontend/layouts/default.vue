@@ -5,7 +5,7 @@ import { useRouter, useRoute } from 'vue-router'
 
 const userstore = useUserStore()
 const router = useRouter()
-const route = useRoute()
+const config = useRuntimeConfig()
 
 const isAuthenticated = computed(() => userstore.access_token !== null)
 var user_name = "" as string
@@ -15,12 +15,12 @@ if (isAuthenticated) {
 
 const spotifyLogin = async () => {
     try {
-        const response = await fetch('http://127.0.0.1:8000/users/spotify/login/')
+        const response = await fetch(`${config.public.SPOTIFY_LOGIN_ENDPOINT}`)
         const data = await response.json()
         const auth_url = data.auth_url
         window.location.href = auth_url.replace(
-            'http://localhost:3000/callback/',
-            'http://localhost:3000/callback'
+            'https://rectify-ebon.vercel.app/callback/',
+            'https://rectify-ebon.vercel.app/callback'
         )
     } catch(error) {
         console.error(error)
