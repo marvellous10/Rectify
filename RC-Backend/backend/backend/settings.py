@@ -18,11 +18,12 @@ ALLOWED_HOSTS = [
     os.getenv('ALLOWED_HOST')
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    'https://rectify-ebon.vercel.app',
-    'https://rectify-ebon.vercel.app/'
-]
+#CORS_ALLOWED_ORIGINS = [
+ #   'https://rectify-ebon.vercel.app',
+  #  'https://rectify-ebon.vercel.app/'
+#]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 INSTALLED_APPS = [

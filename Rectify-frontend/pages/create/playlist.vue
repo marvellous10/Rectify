@@ -25,6 +25,7 @@ const searchSong = async () => {
             'song_query': searched_song.value,
             'access_token': access_token
         }
+        console.log(searched_song.value)
         const response = await fetch(`${config.public.SEARCH_SONG_ENDPOINT}`, {
             method: 'POST',
             body: JSON.stringify(searchData),
