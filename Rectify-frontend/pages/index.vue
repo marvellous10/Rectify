@@ -1,7 +1,7 @@
 <script>
 import { useUserStore } from '../stores/user.store'
 
-userstore = useUserStore()
+const userstore = useUserStore()
 
 const Authenticated = computed(() => userstore.access_token !== null)
 
