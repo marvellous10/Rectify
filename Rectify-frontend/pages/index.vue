@@ -1,9 +1,9 @@
-<script>
+<script setup lang="ts">
 import { useUserStore } from '../stores/user.store'
 
 const userstore = useUserStore()
 
-const Authenticated = computed(() => userstore.access_token !== null)
+const isAuthenticated = computed(() => userstore.access_token !== null)
 
 </script>
 
@@ -19,7 +19,7 @@ const Authenticated = computed(() => userstore.access_token !== null)
                         A project that contains many tools to help you interact with your <span class="green">spotify data</span> anyhow <span class="green">you</span> want to.
                     </span>
                 </div>
-                <div class="sec-btn" v-if="!Authenticated">
+                <div class="sec-btn" v-if="!isAuthenticated">
                     <button class="grn-btn"><span>Sign in with spotify</span></button>
                 </div>
             </div>
