@@ -1,5 +1,5 @@
-from pathlib import Path
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,16 +11,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = False
+DEBUG = True
 
-
-#When contributing don't forget to add your local development server here
+#You can add your allowed host here but keep secret
 ALLOWED_HOSTS = [
-    os.getenv('ALLOWED_HOST'),
+    os.getenv('ALLOWED_HOST')
 ]
 
-
-#Replace with your own frontend origins
 CORS_ALLOWED_ORIGINS = [
     'https://rectify-ebon.vercel.app',
     'https://rectify-ebon.vercel.app/'
@@ -37,7 +34,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'users',
+    
+    #APPS
+    'createplaylist',
 ]
 
 MIDDLEWARE = [
@@ -72,8 +71,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
-
-#Cache for sessions
+#Cache
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
@@ -85,7 +83,6 @@ SESSION_CACHE_ALIAS = 'default'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 '''
 DATABASES = {
     'default': {
@@ -94,12 +91,6 @@ DATABASES = {
     }
 }
 '''
-#MONGODB_CONNECTION_STRING = os.getenv('MONGODB_CONNECTION_STRING')
-
-#mongoengine.connect(host=MONGODB_CONNECTION_STRING)
-
-#SESSION_ENGINE = 'mongo_sessions.session'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

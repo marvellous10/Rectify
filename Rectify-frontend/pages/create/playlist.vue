@@ -1,3 +1,96 @@
+<script setup lang="ts">
+import { useUserStore } from '../../stores/user.store'
+import { useSongStore } from '../../stores/song.store'
+import { reactive, ref } from 'vue'
+
+const userStore = useUserStore()
+const songStore = useSongStore()
+
+const access_token = userStore.access_token
+
+const thumbnail = computed(() => songStore.thumbnail)
+const owner = computed(() => songStore.owner)
+const duration = computed(() => songStore.duration)
+const title = computed(() => songStore.title)
+const artists = computed(() => songStore.artists)
+
+const song_checked = computed(() => songStore.owner !== null)
+
+const searched_song = reactive({
+    song: ''
+})
+
+const searchSong = async () => {
+    console.log('Search song is: ' + searched_song.song)
+    try {
+        const searchData = {
+            'song_query': searched_song.song,
+            'access_token': access_token
+        }
+        const response = await fetch('http://127.0.0.1:8000/create/search/', {
+            method: 'POST',
+            body: JSON.stringify(searchData),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        if (response.ok) {
+            const data = await response.json()
+            const data_det = data.Song_details
+            console.log(data)
+            console.log(userStore.access_token)
+            songStore.setSongDetails(data_det.thumbnail, data_det.owner, data_det.title, data_det.duration, data_det.track_id, data_det.artists)
+            searched_song.song = ''
+        }
+    } catch(error:any) {
+        console.error(error)
+    }
+}
+
+const getCurrentSong = async () => {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/create/getcurrentsong')
+        const data = await response.json()
+        const data_det = data.Song_details
+        songStore.setSongDetails(data_det.thumbnail, data_det.owner, data_det.title, data_det.duration, data_det.track_id, data_det.artists)
+        console.log(data_det)
+    }catch (error) {
+        console.error(error)
+    }
+}
+
+const playlist_song_list = ref([] as Array<[]>)
+var playlist_added = ref(false)
+const createPlaylist = async () => {
+    try {
+        console.log('running create')
+        const playlist_data = {
+            'track_id': songStore.track_id,
+            'token': userStore.access_token
+        }
+        const response = await fetch('http://127.0.0.1:8000/create/createplaylist/', {
+            method: 'POST',
+            body: JSON.stringify(playlist_data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        if (response.ok) {
+            const data = await response.json()
+            console.log(data.playlist)
+            playlist_song_list.value = data.playlist
+            playlist_added.value = true
+        }
+        console.log('playlist is:')
+        console.log(playlist_song_list)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+
+</script>
+
 <template>
     <div class="playlist-wrapper">
         <div class="playlist-header">
@@ -12,26 +105,42 @@
                         </g>
                     </svg>
                 </div>
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search" v-model="searched_song.song" @keyup.enter="searchSong">
             </div>
-            <button class="grn-btn mobile-btn">
+            <button @click="getCurrentSong" class="grn-btn mobile-btn">
                 <span>Use current song</span>
             </button>
         </div>
         <div class="song-layout-container">
-            <SongsLayout />
+            <SongsLayout v-if="song_checked"
+                :thumbnail="thumbnail"
+                :duration="duration"
+                :artists="artists"
+                :owner="owner"
+                :title="title"
+            />
         </div>
         <div class="create-add-buttons">
-            <button class="grn-btn mobile-btn">
+            <button @click="createPlaylist" class="grn-btn mobile-btn">
                 <span>Create</span>
             </button>
-            <button class="grn-btn mobile-btn-hidden">
+            <button class="grn-btn mobile-btn-hidden" v-if="playlist_added === true">
                 <span>Add to playlist</span>
             </button>
         </div>
-        <div class="created-playlist"></div>
+        <div class="created-playlist">
+            <div class="songlayout-container" v-for="song_details in playlist_song_list" :key="song_details.track_id">
+                <SongsLayout
+                :thumbnail="song_details.thumbnail"
+                :duration="song_details.duration"
+                :artists="song_details.artists"
+                :owner="song_details.owner"
+                :title="song_details.title"
+                />
+            </div>
+        </div>
         <div class="playlist-btn">
-            <button class="desktop-hidden grn-btn mobile-btn">
+            <button class="grn-pl-btn" v-if="playlist_added === true">
                 <span>Add to playlist</span>
             </button>
         </div>
@@ -45,6 +154,7 @@
     align-content: start;
     justify-items: center;
     width: 1000px;
+    min-height: 100vh;
     .playlist-header {
         width: 1000px;
         text-align: center;
@@ -100,10 +210,33 @@
         column-gap: 30px;
     }
     .created-playlist {
-        padding: 10px;
+        display: grid;
+        row-gap: 10px;
+        align-content: start;
+        justify-items: center;
+        .songlayout-container {
+            height: fit-content;
+            width: fit-content;
+        }
     }
-    .desktop-hidden {
+    .playlist-btn {
         display: none;
+        .grn-pl-btn {
+            background: #04D04D;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 38px;
+            width: 170px;
+            border: 0;
+            outline: 0;
+            border-radius: 20px;
+            span {
+                font-family: 'medium';
+                font-size: 15px;
+                color: #191414;
+            }
+        }
     }
 }
 
@@ -131,8 +264,11 @@
                 align-content: start;
                 justify-items: center;
             }
-            .desktop-hidden {
-                display: block;
+        }
+        .playlist-btn {
+            display: block;
+            .grn-pl-btn {
+                width: 360px;
             }
         }
     }

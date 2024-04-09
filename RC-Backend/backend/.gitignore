@@ -7,7 +7,6 @@
 logs
 *.log
 
-
 #Cache
 .cache
 *.cache

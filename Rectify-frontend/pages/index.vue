@@ -1,6 +1,10 @@
 <script>
-export default {
-}
+import { useUserStore } from '../stores/user.store'
+
+userstore = useUserStore()
+
+const Authenticated = computed(() => userstore.access_token !== null)
+
 </script>
 
 <template>
@@ -15,7 +19,7 @@ export default {
                         A project that contains many tools to help you interact with your <span class="green">spotify data</span> anyhow <span class="green">you</span> want to.
                     </span>
                 </div>
-                <div class="sec-btn">
+                <div class="sec-btn" v-if="!Authenticated">
                     <button class="grn-btn"><span>Sign in with spotify</span></button>
                 </div>
             </div>

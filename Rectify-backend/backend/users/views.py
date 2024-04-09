@@ -13,7 +13,7 @@ class SpotifyLoginView(APIView):
     def get(self, request, format=None, *args, **kwargs):
         client_ID = os.getenv('SPOTIFY_CLIENT_ID')
         client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
-        redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI')
+        redirect_uri = os.getenv('LOCAL_SPOTIFY_REDIRECT_URI')
         scope = 'user-read-private user-read-email'
         
         sp_oauth = SpotifyOAuth(client_ID, client_secret, redirect_uri, scope=scope)
@@ -25,7 +25,7 @@ class SpotifyCallBackView(APIView):
     def get(self, request, format=None, *args, **kwargs):
         client_ID = os.getenv('SPOTIFY_CLIENT_ID')
         client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
-        redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI')
+        redirect_uri = os.getenv('LOCAL_SPOTIFY_REDIRECT_URI')
         
         
         sp_oauth = SpotifyOAuth(client_ID, client_secret, redirect_uri)
@@ -49,7 +49,7 @@ class SpotifyCallBackView(APIView):
                 'id': user_info['id'],
                 'spotify_display_name': user_info['display_name'],
                 'access_token': token_info['access_token'],
-                'session_id': request.session['6e38w91pvnlqom1bvm2tra0z8']
+                'session_id': request.session[user_info['id']]
             },
             status=status.HTTP_201_CREATED)
 

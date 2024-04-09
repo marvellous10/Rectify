@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user.store';
+import { useSongStore } from '../stores/song.store'
 import { useRouter, useRoute } from 'vue-router'
 
 
 const userstore = useUserStore()
+const songStore = useSongStore()
 const router = useRouter()
 const config = useRuntimeConfig()
 
@@ -30,6 +32,7 @@ const spotifyLogin = async () => {
 
 const logout = async () => {
     userstore.clearUserSession()
+    songStore.removeSongDetails()
     router.push('/')
 }
 </script>
@@ -142,8 +145,6 @@ const logout = async () => {
     align-content: start;
     justify-items: center;
     width: 98.5vw;
-    height: fit-content;
-    height: fit-content;
     padding-bottom:30px;
     background: #191414;
     .navbar {

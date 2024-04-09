@@ -1,21 +1,89 @@
+<script setup lang="ts">
+import { useSongStore } from '../../stores/song.store'
+
+const props = defineProps({
+    thumbnail: {
+        type: String,
+        default: '',
+        required: true
+    },
+    title: {
+        type: String,
+        default: '',
+        required: true
+    },
+    owner: {
+        type: String,
+        default: '',
+        required: true
+    },
+    artists: {
+        type: Array,
+        default: [],
+        required: true
+    },
+    duration: {
+        type: String,
+        default: '',
+        required: true
+    }
+});
+
+const formattedTitleNames = computed(() => {
+    const maxLength = 10
+    return title.length > maxLength
+      ? `${title.slice(0, maxLength)}...`
+      : title
+})
+
+const formattedOwnerNames = computed(() => {
+    const maxLength = 7
+    return owner.length > maxLength
+      ? `${owner.slice(0, maxLength)}...`
+      : owner
+})
+
+
+const formattedArtistNames = computed(() => {
+  if (props.artists.length === 1) {
+    const maxLength = 10
+    return props.artists[0].length > maxLength
+    ? `${props.artists[0].slice(0, maxLength)}...`
+    : props.artists[0] 
+  } else if (props.artists.length > 1) {
+    const maxLength = 10
+    const artistNames = props.artists.join(', ')
+    return artistNames.length > maxLength
+      ? `${artistNames.slice(0, maxLength)}...`
+      : artistNames
+  } else {
+    return ''
+  }
+})
+
+
+
+const { thumbnail, title, artists, duration, owner } = props;
+</script>
+
 <template>
     <div class="song-container">
         <div class="thumbnail-name">
-            <NuxtImg src="/createplaylist/image-lady.png" class="song-thumbnail" />
+            <NuxtImg :src="props.thumbnail" class="song-thumbnail" />
             <div class="song-title-artist">
                 <div class="song-name">
-                    <span>A lady</span>
+                    <span>{{ formattedTitleNames }}</span>
                 </div>
                 <div class="song-artist">
-                    <span>Tally Hall</span>
+                    <span>{{ formattedArtistNames }}</span>
                 </div>
             </div>
         </div>
         <div class="stream-number">
-            <span>34,121,405</span>
+            <span>{{ formattedOwnerNames }}</span>
         </div>
         <div class="song-duration">
-            <span>1:48</span>
+            <span>{{ props.duration }}</span>
         </div>
         <div class="liked-song">
             <svg viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,6 +122,7 @@
     .song-title-artist {
         display: grid;
         height: 40px;
+        width: 150px;
         .song-name {
             align-self: start;
             span {
@@ -72,9 +141,9 @@
         }
     }
     .stream-number {
-        height: 40px;
-        width: 100px;
-        display: flex;
+        height: 20px;
+        width: 70px;
+        //display: flex;
         align-items: center;
         justify-content: left;
         span {
@@ -84,7 +153,8 @@
         }
     }
     .song-duration {
-        height: 40px;
+        height: 20px;
+        width: 40px;
         display: flex;
         align-items: center;
         justify-content: left;
@@ -112,6 +182,17 @@
 @media only screen and (max-width: 460px) {
     .song-container {
         width: 340px;
+        .song-title-artist {
+            width: 100px;
+            .song-name {
+                align-self: start;
+                span {
+                    font-family: 'medium';
+                    font-size: 15px;
+                    color: #FEFEFE;
+                }
+            }
+        }
     }
 }
 </style>
