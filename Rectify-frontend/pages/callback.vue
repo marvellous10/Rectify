@@ -14,7 +14,6 @@ const config = useRuntimeConfig()
 
 
 const handleCallback = async() => {
-    console.log('Function is running')
     try {
         const code = route.query.code
         if (code) {

@@ -5,6 +5,7 @@ import { reactive, ref } from 'vue'
 
 const userStore = useUserStore()
 const songStore = useSongStore()
+const config = useRuntimeConfig()
 
 const access_token = userStore.access_token
 
@@ -21,13 +22,12 @@ const searched_song = reactive({
 })
 
 const searchSong = async () => {
-    console.log('Search song is: ' + searched_song.song)
     try {
         const searchData = {
             'song_query': searched_song.song,
             'access_token': access_token
         }
-        const response = await fetch('http://127.0.0.1:8000/create/search/', {
+        const response = await fetch(`${config.public.SEARCH_SONG_ENDPOINT}`, {
             method: 'POST',
             body: JSON.stringify(searchData),
             headers: {
@@ -37,8 +37,6 @@ const searchSong = async () => {
         if (response.ok) {
             const data = await response.json()
             const data_det = data.Song_details
-            console.log(data)
-            console.log(userStore.access_token)
             songStore.setSongDetails(data_det.thumbnail, data_det.owner, data_det.title, data_det.duration, data_det.track_id, data_det.artists)
             searched_song.song = ''
         }
@@ -49,11 +47,10 @@ const searchSong = async () => {
 
 const getCurrentSong = async () => {
     try {
-        const response = await fetch('http://127.0.0.1:8000/create/getcurrentsong')
+        const response = await fetch(`${config.public.CURRENT_SONG_ENDPOINT}`)
         const data = await response.json()
         const data_det = data.Song_details
         songStore.setSongDetails(data_det.thumbnail, data_det.owner, data_det.title, data_det.duration, data_det.track_id, data_det.artists)
-        console.log(data_det)
     }catch (error) {
         console.error(error)
     }
@@ -68,7 +65,7 @@ const createPlaylist = async () => {
             'track_id': songStore.track_id,
             'token': userStore.access_token
         }
-        const response = await fetch('http://127.0.0.1:8000/create/createplaylist/', {
+        const response = await fetch(`${config.public.GET_PLAYLIST_ENDPOINT}`, {
             method: 'POST',
             body: JSON.stringify(playlist_data),
             headers: {
@@ -77,12 +74,9 @@ const createPlaylist = async () => {
         })
         if (response.ok) {
             const data = await response.json()
-            console.log(data.playlist)
             playlist_song_list.value = data.playlist
             playlist_added.value = true
         }
-        console.log('playlist is:')
-        console.log(playlist_song_list)
     } catch (error) {
         console.error(error)
     }
