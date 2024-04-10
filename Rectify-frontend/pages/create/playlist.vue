@@ -17,15 +17,17 @@ const artists = computed(() => songStore.artists)
 
 const song_checked = computed(() => songStore.owner !== null)
 
-const searched_song = ref('')
+const searched_song = reactive({
+    song: ''
+})
 
 const searchSong = async () => {
     try {
         const searchData = {
-            'song_query': searched_song.value,
+            'song_query': searched_song.song,
             'access_token': access_token
         }
-        console.log(searched_song.value)
+        console.log(searched_song.song)
         const response = await fetch(`${config.public.SEARCH_SONG_ENDPOINT}`, {
             method: 'POST',
             body: JSON.stringify(searchData),

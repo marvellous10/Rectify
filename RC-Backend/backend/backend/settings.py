@@ -11,19 +11,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 
 #You can add your allowed host here but keep secret
 ALLOWED_HOSTS = [
     os.getenv('ALLOWED_HOST')
 ]
 
-#CORS_ALLOWED_ORIGINS = [
- #   'https://rectify-ebon.vercel.app',
-  #  'https://rectify-ebon.vercel.app/'
-#]
+CORS_ALLOWED_ORIGINS = [
+    'https://rectify-ebon.vercel.app',
+    'https://rectify-ebon.vercel.app/'
+]
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 INSTALLED_APPS = [
