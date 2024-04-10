@@ -2,8 +2,25 @@
 import { useUserStore } from '../stores/user.store'
 
 const userstore = useUserStore()
+const config = useRuntimeConfig()
 
 const isAuthenticated = computed(() => userstore.access_token !== null)
+
+
+
+const spotifyLogin = async () => {
+    try {
+        const response = await fetch(`${config.public.SPOTIFY_LOGIN_ENDPOINT}`)
+        const data = await response.json()
+        const auth_url = data.auth_url
+        window.location.href = auth_url.replace(
+            'https://rectify-ebon.vercel.app/callback/',
+            'https://rectify-ebon.vercel.app/callback'
+        )
+    } catch(error) {
+        console.error(error)
+    }
+}
 
 </script>
 
@@ -20,7 +37,7 @@ const isAuthenticated = computed(() => userstore.access_token !== null)
                     </span>
                 </div>
                 <div class="sec-btn" v-if="!isAuthenticated">
-                    <button class="grn-btn"><span>Sign in with spotify</span></button>
+                    <button @click="spotifyLogin" class="grn-btn"><span>Sign in with spotify</span></button>
                 </div>
             </div>
         </div>
