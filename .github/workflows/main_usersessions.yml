@@ -32,7 +32,7 @@ jobs:
         run: virtualenv usersession-env
 
       - name: Activate virtual environment
-        run: source usersession-env\Scripts\activate
+        run: source usersession-env/Scripts/activate
 
       - name: Change directory to backend
         run: cd backend
@@ -47,7 +47,7 @@ jobs:
           zip -r ../release.zip .
           cd ../..
 
-      - name: Upload artifact for deployment jobs
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v3
         with:
           name: backend-artifact
