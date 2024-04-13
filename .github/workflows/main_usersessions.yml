@@ -25,21 +25,19 @@ jobs:
       - name: Install virtualenv package
         run: python -m pip install virtualenv
 
-      - name: Change to Rectify-backend directory, install virtualenv and activate it
+      - name: Change to Rectify-backend directory, install virtualenv, activate it, change to backend directory, install dependencies
         run: |
          cd Rectify-backend
          virtualenv usersession-env
          source usersession-env/bin/activate
-
-      - name: Change directory to backend and install dependencies
-        run: |
-          cd Rectify-backend/backend
-          pip install -r requirements.txt
+         cd backend
+         pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       #zip release.zip ./* -r
       - name: Zip artifact for deployment (Zip backend directory)
         run: |
+          cd Rectify-backend
           zip -r ../release.zip .
           cd ../..
 
@@ -48,6 +46,7 @@ jobs:
         with:
           name: backend-artifact
           path: |
+            Rectify-backend
             release.zip
             !usersession-env/
 
