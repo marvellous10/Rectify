@@ -31,7 +31,9 @@ jobs:
           . venv/bin/activate
 
       - name: Move directory to backend directory inside Rectify-backend
-        run: cd backend
+        run: |
+          cd ..
+          cd backend
       
       - name: Install dependencies
         run: pip install -r requirements.txt
