@@ -32,6 +32,12 @@ jobs:
          source usersession-env/bin/activate
          cd backend
          pip install -r requirements.txt
+
+      - name: Set ALLOWED_HOSTS environment variable
+        run: echo "ALLOWED_HOSTS=your-app-name.azurewebsites.net" >> $GITHUB_ENV
+
+      - name: Create runtime.txt
+        run: echo "python-3.9" > runtime.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       #zip release.zip ./* -r
@@ -46,7 +52,6 @@ jobs:
         with:
           name: backend-artifact
           path: |
-            Rectify-backend
             release.zip
             !usersession-env/
 
