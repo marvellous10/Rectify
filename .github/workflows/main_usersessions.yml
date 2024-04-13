@@ -33,7 +33,6 @@ jobs:
 
       #- name: Activate virtual environment
        # run: source usersession-env/bin/activate
-
       - name: Install dependencies
         run: pip install -r requirements.txt
         
