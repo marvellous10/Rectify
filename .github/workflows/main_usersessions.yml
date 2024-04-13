@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Change to backend directory
-        run: cd Rectify-backend/backend
+      - name: Change to Rectify-backend directory
+        run: cd Rectify-backend
 
       - name: Set up Python version
         uses: actions/setup-python@v1
@@ -28,7 +28,10 @@ jobs:
       - name: Create and start virtual environment
         run: |
           python -m venv venv
-          source venv/bin/activate
+          . venv/bin/activate
+
+      - name: Move directory to backend directory inside Rectify-backend
+        run: cd backend
       
       - name: Install dependencies
         run: pip install -r requirements.txt
