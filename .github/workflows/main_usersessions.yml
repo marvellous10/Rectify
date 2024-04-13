@@ -32,7 +32,7 @@ jobs:
         run: virtualenv usersession-env
 
       - name: Activate virtual environment
-        run: source usersession-env\bin\activate
+        run: source usersession-env\Scripts\activate
 
       - name: Change directory to backend
         run: cd backend
