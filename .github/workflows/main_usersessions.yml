@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Change to backend directory
+        run: cd Rectify-backend/backend
+
       - name: Set up Python version
         uses: actions/setup-python@v1
         with:
@@ -35,7 +38,6 @@ jobs:
 
       - name: Zip artifact for deployment
         run: |
-          cd Rectify-backend/backend 
           zip -r ../release.zip .
           cd ../..
 
@@ -65,8 +67,7 @@ jobs:
       - name: Unzip artifact for deployment
         run: |
           unzip release.zip
-          mv Rectify-backend/backend/* ./
-          rm -r Rectify-backend
+          rm -r release.zip
 
       
       - name: Login to Azure
