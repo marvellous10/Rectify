@@ -25,22 +25,16 @@ jobs:
       - name: Install virtualenv package
         run: python -m pip install virtualenv
 
-      - name: Change to Rectify-backend directory
-        run: cd Rectify-backend/backend
+      - name: Change to Rectify-backend directory, install virtualenv and activate it
+        run: |
+         cd Rectify-backend
+         virtualenv usersession-env
+         source usersession-env/bin/activate
 
-      #- name: Create virtual environment
-       # run: virtualenv usersession-env
-
-      #- name: Activate virtual environment
-       # run: source usersession-env/bin/activate
-      
-      - name: List out all files in backend
+      - name: Change directory to backend and install dependencies
         run: |
           cd Rectify-backend/backend
-          ls -la
-
-      #- name: Change directories and list out Install dependencies
-        #run: pip install -r requirements.txt
+          pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       #zip release.zip ./* -r
