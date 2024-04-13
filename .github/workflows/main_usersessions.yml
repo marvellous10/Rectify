@@ -35,7 +35,9 @@ jobs:
        # run: source usersession-env/bin/activate
       
       - name: List out all files in backend
-        run: ls -la
+        run: |
+          cd Rectify-backend/backend
+          ls -la
 
       #- name: Change directories and list out Install dependencies
         #run: pip install -r requirements.txt
