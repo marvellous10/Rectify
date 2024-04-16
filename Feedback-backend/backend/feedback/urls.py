@@ -1,5 +1,6 @@
 from django.urls import path
+from .views import *
 
 urlpatterns = [
-    path(),
+    path('post/', SendFeedback.as_view(), name='send-feedback'),
 ]
